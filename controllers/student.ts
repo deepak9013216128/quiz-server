@@ -75,3 +75,22 @@ export const getStudentQnsFromQuiz: RequestHandler = async (req, res, next) => {
 		next(err);
 	}
 };
+
+export const submitQuiz: RequestHandler = async (req, res, next) => {
+	const { quizId } = req.params;
+	try {
+		const quizInvitation = await QuizInvitation.findOneAndUpdate(
+			{
+				quiz: new ObjectId(quizId),
+				invitedTo: new ObjectId(req.user),
+			},
+			{ isAttempted: true }
+		);
+		return res.status(200).json({
+			status: true,
+			quizInvitation,
+		});
+	} catch (err) {
+		next(err);
+	}
+};

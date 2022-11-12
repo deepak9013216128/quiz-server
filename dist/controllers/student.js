@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudentQnsFromQuiz = exports.getStudentQuiz = void 0;
+exports.submitQuiz = exports.getStudentQnsFromQuiz = exports.getStudentQuiz = void 0;
 const mongodb_1 = require("mongodb");
 const quiz_1 = require("../models/quiz");
 const getStudentQuiz = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -84,3 +84,19 @@ const getStudentQnsFromQuiz = (req, res, next) => __awaiter(void 0, void 0, void
     }
 });
 exports.getStudentQnsFromQuiz = getStudentQnsFromQuiz;
+const submitQuiz = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { quizId } = req.params;
+    try {
+        yield quiz_1.QuizInvitation.findOneAndUpdate({
+            quiz: new mongodb_1.ObjectId(quizId),
+            invitedTo: new mongodb_1.ObjectId(req.user),
+        });
+        return res.status(200).json({
+            status: true,
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.submitQuiz = submitQuiz;
