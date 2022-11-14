@@ -243,7 +243,7 @@ export const getQuizInvitation: RequestHandler = async (req, res, next) => {
 
 		const quizInvitation = await QuizInvitation.find({
 			invitedBy: new ObjectId(req.user),
-		}).populate("invitedTo", "name email");
+		}).populate("invitedTo quiz", "name email title");
 
 		return res.status(200).json({
 			quizInvitation: quizInvitation,
