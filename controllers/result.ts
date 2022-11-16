@@ -22,3 +22,24 @@ export const getUserQuizResult: RequestHandler = async (req, res, next) => {
 		next(err);
 	}
 };
+
+export const getQuizResults: RequestHandler = async (req, res, next) => {
+	const { quizId } = req.params;
+
+	if (req.user.role !== "admin" && req.user.role !== "instructor") {
+		res.status(403);
+		throw new Error("Not authorized to fetch quiz result.");
+	}
+	try {
+		const results = await QuizInvitation.find({
+			quiz: new ObjectId(quizId),
+			invitedBy: new ObjectId(req.user),
+		}).populate("invitedTo quiz", "name email title");
+		return res.status(200).json({
+			status: true,
+			results,
+		});
+	} catch (err) {
+		next(err);
+	}
+};
