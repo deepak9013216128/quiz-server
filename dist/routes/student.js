@@ -9,4 +9,6 @@ router
     .route("/quiz/:quizId")
     .get(auth_1.protect, student_1.getStudentQuiz)
     .post(auth_1.protect, student_1.submitQuiz);
+router.route("/results").get(auth_1.protect, student_1.getQuizResults);
+router.route("/results/:quizId").get(auth_1.protect, student_1.getQuizResult);
 exports.default = router;

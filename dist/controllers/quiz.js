@@ -243,7 +243,7 @@ const getQuizInvitation = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         }
         const quizInvitation = yield quiz_1.QuizInvitation.find({
             invitedBy: new mongodb_1.ObjectId(req.user),
-        }).populate("invitedTo", "name email");
+        }).populate("invitedTo quiz", "name email title");
         return res.status(200).json({
             quizInvitation: quizInvitation,
             status: true,
