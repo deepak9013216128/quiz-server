@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import mongoose from "mongoose";
-import routes from "./routes";
 import bodyParser from "body-parser";
-import { notFound, errorHandler } from "./middleware/error";
+import routes from "./src/routes";
+import { notFound, errorHandler } from "./src/middleware/error";
 
 dotenv.config();
 
