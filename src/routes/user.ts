@@ -1,5 +1,7 @@
 import { Router, Response, Request } from "express";
 import {
+	changeUserRole,
+	changeUserStatus,
 	getUserProfile,
 	getUsers,
 	login,
@@ -17,6 +19,8 @@ router.post("/invitation", protect, admin, sendInvitation);
 router.post("/register", registerUser);
 
 router.get("/profile", protect, getUserProfile);
+router.put("/status", protect, admin, changeUserStatus);
+router.put("/role", protect, admin, changeUserRole);
 router.get("/", protect, admin, getUsers);
 
 export default router;

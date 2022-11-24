@@ -28,7 +28,6 @@ export const verfiyToken = (token: string) => {
 			isVerified: false,
 		};
 	}
-	console.log(decoded);
 	return {
 		email: decoded.email,
 		name: decoded.name,

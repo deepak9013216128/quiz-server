@@ -6,6 +6,7 @@ import {
 	generateToken,
 	verfiyToken,
 } from "../utils/token";
+import { ObjectId } from "mongodb";
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -132,6 +133,62 @@ export const getUsers: RequestHandler = async (req, res, next) => {
 		if (users) {
 			res.json({
 				users: users,
+				status: true,
+			});
+		} else {
+			res.status(404);
+			throw new Error("User not found");
+		}
+	} catch (err) {
+		next(err);
+	}
+};
+
+// @desc    Change users status
+// @route   PUT /api/users/status
+// @access  Private
+export const changeUserStatus: RequestHandler = async (req, res, next) => {
+	const { userId, status } = req.body;
+	try {
+		const user = await User.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ status: status },
+			{
+				new: true,
+			}
+		);
+
+		if (user) {
+			res.json({
+				user: user,
+				status: true,
+			});
+		} else {
+			res.status(404);
+			throw new Error("User not found");
+		}
+	} catch (err) {
+		next(err);
+	}
+};
+
+// @desc    Change users role
+// @route   PUT /api/users/role
+// @access  Private
+export const changeUserRole: RequestHandler = async (req, res, next) => {
+	const { userId, role } = req.body;
+	try {
+		const user = await User.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ role: role },
+			{
+				new: true,
+			}
+		);
+
+		if (user) {
+			res.json({
+				user: user,
 				status: true,
 			});
 		} else {
