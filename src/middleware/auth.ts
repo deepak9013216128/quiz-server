@@ -20,6 +20,10 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
 				next(new Error("Not authorized"));
 			}
 			req.user = await User.findById(decoded.id);
+			if (req.user.status === "blocked") {
+				res.status(401);
+				next(new Error("You are blocked by admin."));
+			}
 			next();
 		} catch (error) {
 			console.error(error);

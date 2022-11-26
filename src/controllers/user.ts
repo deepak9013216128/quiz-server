@@ -16,6 +16,10 @@ export const login: RequestHandler = async (req, res, next) => {
 	try {
 		const user = await User.findOne({ email }).populate("password");
 		if (user && (await user.matchPassword(password))) {
+			if (user.status === "blocked") {
+				res.status(401);
+				next(new Error("You are blocked by admin."));
+			}
 			res.json({
 				_id: user._id,
 				name: user.name,
