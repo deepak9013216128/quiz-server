@@ -12,7 +12,7 @@ export const createQuiz: RequestHandler = async (req, res, next) => {
 			res.status(403);
 			throw new Error("Not authorized to create quiz.");
 		}
-		const quiz = new Quiz({ title, description, user: req.user });
+		const quiz = new Quiz({ title, description, user: new ObjectId(req.user) });
 		await quiz.save();
 
 		return res.status(201).json({
@@ -154,6 +154,32 @@ export const addQnsInQuiz: RequestHandler = async (req, res, next) => {
 
 		return res.status(201).json({
 			message: "Qns added in quiz.",
+			status: true,
+		});
+	} catch (err) {
+		next(err);
+	}
+};
+
+export const removeQnsFromQuiz: RequestHandler = async (req, res, next) => {
+	const { qnsId } = req.body;
+	const { quizId } = req.params;
+	console.log(qnsId, quizId);
+	try {
+		if (req.user.role !== "admin" && req.user.role !== "instructor") {
+			res.status(403);
+			throw new Error("Not authorized to add qns in quiz.");
+		}
+
+		const qns = await Qns.findByIdAndUpdate(qnsId, { $inc: { qnsUsed: -1 } });
+
+		const quizQns = await QuizQns.findOneAndRemove({
+			quiz: new ObjectId(quizId),
+			qns: new ObjectId(qnsId),
+		});
+
+		return res.status(200).json({
+			message: "Qns remove from quiz.",
 			status: true,
 		});
 	} catch (err) {

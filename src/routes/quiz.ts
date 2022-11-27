@@ -6,6 +6,7 @@ import {
 	getQnsFromQuiz,
 	getQuiz,
 	getQuizInvitation,
+	removeQnsFromQuiz,
 	sendQuizInvitation,
 } from "../controllers/quiz";
 
@@ -24,7 +25,8 @@ router
 router
 	.route("/:quizId")
 	.get(protect, getQnsFromQuiz)
-	.post(protect, addQnsInQuiz);
+	.post(protect, addQnsInQuiz)
+	.delete(protect, removeQnsFromQuiz);
 
 router.route("/:quizId/:qnsId").post(protect, createQnsResponse);
 export default router;
