@@ -192,6 +192,16 @@ export const getQnsFromQuiz: RequestHandler = async (req, res, next) => {
 	try {
 		let quizQns;
 		if (req.user.role === "student") {
+			const result = await QuizInvitation.findOne({
+				invitedTo: new ObjectId(req.user),
+				quiz: new ObjectId(quizId),
+			}).select("isAttempted");
+			if (result?.isAttempted)
+				return res.status(200).json({
+					quizQns: [],
+					message: "Quiz link is expired!",
+					status: false,
+				});
 			quizQns = await QuizQns.find({ quiz: new ObjectId(quizId) }).populate(
 				"qns",
 				"title description durationOfQns options points"
@@ -314,7 +324,6 @@ export const createQnsResponse: RequestHandler = async (req, res, next) => {
 					? (qns?.points as number)
 					: 0;
 		}
-		console.log(qns, ans);
 		await userRes.save();
 
 		return res.status(200).json({
