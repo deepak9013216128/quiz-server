@@ -23,7 +23,26 @@ export const createTopic: RequestHandler = async (req, res, next) => {
 
 export const getTopics: RequestHandler = async (req, res, next) => {
 	try {
-		const topic = await Topic.find({});
+		// const topic = await Topic.find({});
+		const topic = await Topic.aggregate([
+			{ $match: {} },
+			{
+				$lookup: {
+					from: "subtopics",
+					localField: "_id",
+					foreignField: "topic",
+					as: "subTopic",
+				},
+			},
+			{
+				$project: {
+					title: 1,
+					description: 1,
+					_id: 1,
+					subTopicCount: { $size: "$subTopic" },
+				},
+			},
+		]);
 		return res.status(200).json({
 			topic: topic,
 			status: true,
