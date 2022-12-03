@@ -12,8 +12,7 @@ dotenv.config();
 const app: Express = express();
 
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI =
-	"mongodb+srv://deepak:LHMWm5mwySFXRj8@nodejs.zz6dw.mongodb.net/quiz?retryWrites=true&w=majority";
+const MONGODB_URI = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}.zz6dw.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 
 app.use(cors());
 if (process.env.NODE_ENV === "development") {
